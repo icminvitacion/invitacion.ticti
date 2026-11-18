@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación - Trompetas y Fiestas 2026</title>
+  <style>
+    :root {
+      --primary: #1b5e80;
+      --primary-hover: #134660;
+      --whatsapp: #25D366;
+      --whatsapp-hover: #1ebe5d;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --border: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 950px;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: 1.4rem;
+      color: var(--primary);
+    }
+
+    p.subtitle {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-whatsapp {
+      background-color: var(--whatsapp);
+      color: #ffffff;
+    }
+
+    .btn-whatsapp:hover {
+      background-color: var(--whatsapp-hover);
+    }
+
+    .preview-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      background-color: #367396;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Formulario -->
+    <div class="form-section">
+      <h2>Personalizar Invitación</h2>
+      <p class="subtitle">Completa los datos para generar tu invitación lista para compartir.</p>
+
+      <div class="form-group">
+        <label for="invitado">Nombre del invitado</label>
+        <input type="text" id="invitado" placeholder="Ej. Familia Pérez Gómez" value="Familia Pérez Gómez">
+      </div>
+
+      <div class="form-group">
+        <label for="hora">Hora del evento</label>
+        <input type="text" id="hora" placeholder="Ej. 19:00 hrs" value="19:00 hrs">
+      </div>
+
+      <div class="form-group">
+        <label for="direccion">Dirección / Lugar del culto</label>
+        <textarea id="direccion" placeholder="Ej. Av. Principal #123, Salón Central">Av. Principal #123, Frente a la Plaza Central</textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnDescargar">Descargar Invitación (PNG)</button>
+        <button class="btn btn-whatsapp" id="btnWhatsapp">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+          </svg>
+          Enviar por WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- Vista Previa -->
+    <div class="preview-section">
+      <canvas id="canvas" width="576" height="1024"></canvas>
+      <p class="hint">Vista previa en tiempo real</p>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const inputInvitado = document.getElementById('invitado');
+    const inputHora = document.getElementById('hora');
+    const inputDireccion = document.getElementById('direccion');
+    const btnDescargar = document.getElementById('btnDescargar');
+    const btnWhatsapp = document.getElementById('btnWhatsapp');
+
+    const imagenFondo = new Image();
+    imagenFondo.src = 'plantilla.png';
+    imagenFondo.onload = () => {
+      canvas.width = imagenFondo.naturalWidth;
+      canvas.height = imagenFondo.naturalHeight;
+      dibujarCanvas();
+    };
+
+    function dibujarTextoMultilinea(texto, x, y, maxWidth, lineHeight) {
+      const parrafos = texto.split('\n');
+      let currentY = y;
+
+      parrafos.forEach(parrafo => {
+        const palabras = parrafo.split(' ');
+        let linea = '';
+
+        for (let n = 0; n < palabras.length; n++) {
+          const lineaPrueba = linea + palabras[n] + ' ';
+          const metricas = ctx.measureText(lineaPrueba);
+          if (metricas.width > maxWidth && n > 0) {
+            ctx.fillText(linea.trim(), x, currentY);
+            linea = palabras[n] + ' ';
+            currentY += lineHeight;
+          } else {
+            linea = lineaPrueba;
+          }
+        }
+        ctx.fillText(linea.trim(), x, currentY);
+        currentY += lineHeight;
+      });
+    }
+
+    function dibujarCanvas() {
+      const W = canvas.width;
+      const H = canvas.height;
+
+      ctx.clearRect(0, 0, W, H);
+
+      if (imagenFondo.complete && imagenFondo.naturalWidth !== 0) {
+        ctx.drawImage(imagenFondo, 0, 0, W, H);
+      } else {
+        ctx.fillStyle = '#367396';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.font = `${W * 0.032}px sans-serif`;
+        ctx.fillText('No se encontró "plantilla.png" en la carpeta', W / 2, H / 2);
+        return;
+      }
+
+      ctx.textBaseline = 'middle';
+
+      // --- 1. NOMBRE DEL INVITADO (LETRAS DORADAS EN MAYÚSCULAS DEBAJO DE "2026") ---
+      const nombreMayusculas = inputInvitado.value.toUpperCase();
+      if (nombreMayusculas.trim() !== '') {
+        ctx.textAlign = 'center';
+        ctx.letterSpacing = '1.5px';
+        
+        let fontSizeInvitado = Math.round(W * 0.038);
+        ctx.font = `700 ${fontSizeInvitado}px system-ui, -apple-system, sans-serif`;
+        while (ctx.measureText(nombreMayusculas).width > W * 0.86 && fontSizeInvitado > 12) {
+          fontSizeInvitado--;
+          ctx.font = `700 ${fontSizeInvitado}px system-ui, -apple-system, sans-serif`;
+        }
+
+        const posYInvitado = H * 0.373;
+
+        const gradienteDorado = ctx.createLinearGradient(
+          0, 
+          posYInvitado - fontSizeInvitado * 0.6, 
+          0, 
+          posYInvitado + fontSizeInvitado * 0.6
+        );
+        gradienteDorado.addColorStop(0.0, '#FFF3B0');
+        gradienteDorado.addColorStop(0.5, '#F5C451');
+        gradienteDorado.addColorStop(1.0, '#C88A1E');
+
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 2;
+
+        ctx.fillStyle = gradienteDorado;
+        ctx.fillText(nombreMayusculas, W / 2, posYInvitado);
+
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.letterSpacing = '0px';
+      }
+
+      // --- 2. HORA ---
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'left';
+      const fontSizeHora = Math.round(W * 0.036);
+      ctx.font = `600 ${fontSizeHora}px system-ui, -apple-system, sans-serif`;
+      ctx.fillText(inputHora.value, W * 0.58, H * 0.673);
+
+      // --- 3. DIRECCIÓN ---
+      const fontSizeDir = Math.round(W * 0.034);
+      ctx.font = `400 ${fontSizeDir}px system-ui, -apple-system, sans-serif`;
+      const anchoMaximoDir = W * 0.70;
+      const interlineado = fontSizeDir * 1.25;
+
+      dibujarTextoMultilinea(inputDireccion.value, W * 0.225, H * 0.736, anchoMaximoDir, interlineado);
+    }
+
+    [inputInvitado, inputHora, inputDireccion].forEach(input => {
+      input.addEventListener('input', dibujarCanvas);
+    });
+
+    function obtenerNombreArchivo() {
+      const nombreLimpio = inputInvitado.value.trim().replace(/\s+/g, '_');
+      return nombreLimpio 
+        ? `Invitacion_${nombreLimpio}.png` 
+        : 'Invitacion_Trompetas_y_Fiestas_2026.png';
+    }
+
+    function descargarImagen() {
+      const enlace = document.createElement('a');
+      enlace.download = obtenerNombreArchivo();
+      enlace.href = canvas.toDataURL('image/png');
+      enlace.click();
+    }
+
+    btnDescargar.addEventListener('click', descargarImagen);
+
+    // Compartir vía WhatsApp
+
